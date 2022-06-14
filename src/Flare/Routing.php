@@ -10,7 +10,7 @@ class Routing
 {
     protected $routers = [];    // In here we store all the different router instances
     protected string $routeString = '';     // The current, cleaned route-string
-    protected array $route = [];    // The route-string, divided by slash
+    protected array $routes = [];    // The route-string, divided by slash
 
 
     /**
@@ -62,7 +62,7 @@ class Routing
         $routeString = str_replace($baseUrl, '', $url['path']);
         $routeString = trim($routeString, '/');
         $this->routeString = $routeString;
-        $this->route = explode('/', $routeString);
+        $this->routes = explode('/', $routeString);
 
         return $routeString;
     }
@@ -74,6 +74,67 @@ class Routing
     public function setRouteString($routeString)
     {
         $this->routeString = $routeString;
-        $this->route = explode('/', $routeString);
+        $this->routes = explode('/', $routeString);
+    }
+
+    /**
+     * Check all registered routers for a specific route
+     * @param string $alias                 The current alias
+     * @param int|bool $parentId            The parentId (router-internal key, every router can have their own key-management), if the item is root, this is false
+     * @param string|bool $parentRouter     The key with which the parent Router has been added into the router-hive
+     * @return object|bool                  If found, a route-object will be returned, otherwise false
+     */
+    public function matchRoute(string $alias, int|bool $parentId, string|bool $parentRouter): object|bool
+    {
+        foreach($this->routers as $router)
+        {
+            $route = $router->matchRoute($alias, $parentId, $parentRouter);
+
+            if($route)
+            {
+                return $route;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Matches the current route-string
+     * @TODO: Check what to do when user is on the homepage (route array will be empty)
+     * @return object|bool
+     * @throws Exception
+     */
+    public function matchRoutes()
+    {
+        $id = false;
+        $parentId = false;
+        $parentRouter = false;
+        $route = false;
+
+        foreach($this->routes as $alias)
+        {
+            try
+            {
+                $route = $this->matchRoute($alias, $parentId, $parentRouter);
+            }
+            catch(\Exception $e)
+            {
+                // TODO: This is only for testing purposes, remove this piece of junk and move 404 handling to a custom error handler
+                echo "Error: ".$e->getMessage();
+
+                return false;
+            }
+
+            if(!$route)
+            {
+                throw new \Exception("Route: ".$alias." not found", 404);
+            }
+
+            $parentId = $route->getId();
+            $parentRouter = $route->getRouter();
+        }
+
+        return $route;
     }
 }

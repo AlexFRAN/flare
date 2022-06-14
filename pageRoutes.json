@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "alias": "products",
+        "parentId": false,
+        "parentRouter": false,
+        "content": "<h1>Products page</h1>"
+    },
+    {
+        "id": 2,
+        "alias": "ottica",
+        "parentId": 1,
+        "parentRouter": "PageRouter",
+        "content": "<h1>Category page</h1>"
+    },
+    {
+        "id": 3,
+        "alias": "zeiss",
+        "parentId": 2,
+        "parentRouter": "PageRouter",
+        "content": "<h1>Single product page</h1>"
+    }
+]
