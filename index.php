@@ -9,17 +9,12 @@ function pr($value)
     echo '</pre>';
 }
 
-require_once(dirname(__FILE__).'/src/Flare/Routing.php');
-require_once(dirname(__FILE__).'/src/Flare/RouterInterface.php');
-require_once(dirname(__FILE__).'/src/Flare/Router/PageRouter.php');
-require_once(dirname(__FILE__).'/src/Flare/Route.php');
-require_once(dirname(__FILE__).'/src/Flare/PageTest.php');
+require_once(dirname(__FILE__).'/vendor/autoload.php');
 
 $routing = new Flare\Routing();
 $pageRouter = new Flare\Router\PageRouter();
 $routing->addRouter('PageRouter', $pageRouter);
-echo $routing->getRouteString();
-echo '<br/>';
+$routing->getRouteString();
 
 try
 {

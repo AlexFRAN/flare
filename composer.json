@@ -1,0 +1,16 @@
+{
+    "name": "flare/flarecmf",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Flare\\": "src/Flare/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alex Franzelin",
+            "email": "info@alex-franzelin.it"
+        }
+    ],
+    "require": {}
+}
